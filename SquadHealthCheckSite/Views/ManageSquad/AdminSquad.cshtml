@@ -1,0 +1,11 @@
+﻿@model SquadHealthCheck.Squad
+
+<div>
+    <p>
+        @Model.Name
+    </p>
+    <p>
+        @Model.Description
+    </p>
+    <a href="~/ManageSquad/Config/@Model.Id">Configure</a>&nbsp;<a href="~/ManageSquad/Delete/@Model.Id">Delete</a>
+</div>

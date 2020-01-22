@@ -1,0 +1,67 @@
+﻿<link rel="stylesheet" type="text/css" href="~/Content/Site.css">
+<style type="text/css">
+        a:active, a:visited, a{
+            color:@SquadHealthCheck.Colors.ForeGround;
+            text-decoration:none;
+        }
+        a:hover{
+            text-decoration:none;
+            font-weight:bold;
+        }
+</style>
+
+<style type="text/css">
+    .backgroundColor{
+        background-color:@SquadHealthCheck.Colors.BackGround;
+    }
+    .foregroundColor{
+        color:@SquadHealthCheck.Colors.ForeGround;
+    }
+    .backgroundAsForegroundColor{
+         color:@SquadHealthCheck.Colors.BackGround;
+    }
+    .foregroundAsBackgroundColor{
+         background-color:@SquadHealthCheck.Colors.ForeGround;
+    }
+    .colorBorder{
+        border-color:@SquadHealthCheck.Colors.BackGround;
+    }
+    .phoneImage{
+        background-image:url(@(System.Web.Hosting.HostingEnvironment.ApplicationVirtualPath.TrimEnd('/'))/Shared/Images/mobile_@(HttpContext.Current.Request.RequestContext.RouteData.Values["os"]).png)
+    }
+    #header{
+        background-image:url(@(System.Web.Hosting.HostingEnvironment.ApplicationVirtualPath.TrimEnd('/'))/Shared/Images/Header.png);
+    }
+    .gradientBackgroundLeftToRight{
+        background: linear-gradient(to right, @SquadHealthCheck.Colors.BackGround, transparent);
+    }
+    .gradientBackgroundRightToLeft{
+        background: linear-gradient(to left, @SquadHealthCheck.Colors.BackGround, transparent);
+    }
+    h1{
+        color:@SquadHealthCheck.Colors.ForeGround;
+    }
+    .selector:hover, .previous:hover, .next:hover, .OsButton:hover{
+        background-color:@SquadHealthCheck.Colors.ForeGround;
+    }
+    .selected{
+        background-color:@SquadHealthCheck.Colors.ForeGround;
+
+    }
+
+    .nextText, .previousText {
+        color:@SquadHealthCheck.Colors.BackGround;
+    }
+
+    .nextText:hover, .previousText:hover   {
+        color:@SquadHealthCheck.Colors.ForeGround;
+    }
+
+    .actionButton{
+        border-color:@SquadHealthCheck.Colors.ForeGround;
+    }
+    .actionButton:hover{
+        border-color:@SquadHealthCheck.Colors.ForeGround;
+        background-color:@SquadHealthCheck.Colors.BackGround;
+    }
+</style>

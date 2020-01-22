@@ -1,0 +1,8 @@
+﻿@model SquadHealthCheck.TrafficLightModel
+<div style="display:flex;flex-direction:column">
+    @Html.Partial("UserTrafficLight", Model)
+    <div style="font-weight:bold;text-align:center">
+        Squad Values
+    </div>
+    @Html.Partial("SquadTrafficLight", Model)
+</div>

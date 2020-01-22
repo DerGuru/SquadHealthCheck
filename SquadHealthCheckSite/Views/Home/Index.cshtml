@@ -1,0 +1,63 @@
+﻿@model SquadHealthCheck.Models.ViewerModel
+
+@{
+    ViewBag.Title = "Squad Health Check";
+}
+    <div style="position:absolute; top:90px; right:10px;">
+        <button class="actionButton" onclick="location.href='/ManageSquad'">Manage Squads</button>
+    </div>
+<div style="margin-left:10px">
+    <p>
+        Click on the traffic light, which reflects your opinion about an item in your squad. <br />
+        Hover over the red or green traffic light, to see a short description.<br/>
+        You vote in upper line of a squad. The second line is the squads collective opinion about the item.
+    </p>
+</div>
+<div class="Squads">
+
+    @{
+        foreach (var squad in Model.UserData)
+        {
+            <div class="Squad" style="margin:10px">
+                    <div style="font-size:larger;font-weight:bold">
+                        @squad.Name (<a href="~/Leave/@squad.SquadId">Leave</a>)
+                    </div>
+                <div style="display: flex;flex-direction: row;" class="SquadValues">
+                    @{
+                        foreach (var item in squad.UserItems)
+                        {
+                            <div style="width:auto;padding:5px;text-wrap:normal">
+                                <div>
+                                    <p style="text-align:center">
+                                        @item.Name 
+                                    </p>
+                                </div>
+                                
+                                    @Html.Partial("TrafficLight", new SquadHealthCheck.TrafficLightModel { Item = item, SquadId = squad.SquadId })
+                                
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        }
+    }
+
+</div>
+
+<script type="text/javascript">
+    //Add an Eventhandler
+    $.connection.viewerHub.client.updateId = function (id, url) {
+        $(id).css("background-image",url);
+    }
+
+    $.connection.viewerHub.client.updateValue = function (id, value) {
+        $(id).text(value);
+    }
+
+
+    $.connection.viewerHub.client.refresh = function () {
+        location.reload();
+    }
+    $.connection.hub.start();
+</script>

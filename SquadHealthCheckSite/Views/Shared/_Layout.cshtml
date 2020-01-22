@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Html.Partial("Styles")
+    @Scripts.Render("~/bundles/jquery")
+    <script src="~/Scripts/jquery.signalR-2.4.0.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+</head>
+<body>
+    <div class="header foregroundAsBackgroundColor">
+        <span id="logoBG" class="foregroundAsBackgroundColor">
+            <img id="logo" src="~/Content/logo.png" />
+        </span>
+        <div class="headLine"><a href="/" style="color:white;">Squad Health Check</a><br /></div> <!--headline-->
+    </div>
+
+    <div class="innerContent contentBlock">
+        @RenderBody()
+    </div>
+    <footer style="text-align:center;margin-top:5em">
+        Copyright 2016 - @DateTime.Now.Year by Andreas Jakof
+    </footer>
+   
+</body>
+</html>

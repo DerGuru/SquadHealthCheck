@@ -1,0 +1,46 @@
+﻿@model SquadHealthCheck.Models.AdminModel
+@{
+    ViewBag.Title = "Manage Squad Page";
+}
+
+<script type="text/javascript">
+    function onButtonClick() {
+        
+    }
+</script>
+
+<div>
+    Join this Squad by using this URL: <a href="@Model.JoinLink">@Model.JoinLink</a>
+</div>
+<div>
+    @Model.Squad.Name
+</div>
+<div>
+    <div style="display: flex;flex-direction: row;width:100%;flex-wrap:wrap" class="SquadItems">
+        @{
+            foreach (var item in Model.SquadItems)
+            {
+                <div style="width:auto;margin:5px;text-wrap:normal;position:relative">
+                    @Html.Partial("Item", item)
+                    <div>
+                        <a href="~/ManageSquad/RemoveItem/@Model.Squad.Id/@item.Id">Remove Item</a>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+    <hr />
+    <div style="display: flex;flex-direction: row;width:100%;flex-wrap:wrap" class="SquadItems">
+        @{
+            foreach (var item in Model.AvailableItems)
+            {
+                <div style="width:auto;margin:5px;text-wrap:normal;position:relative">
+                    @Html.Partial("Item", item)
+                    <div>
+                        <a href="~/ManageSquad/AddItem/@Model.Squad.Id/@item.Id">Add Item</a>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
