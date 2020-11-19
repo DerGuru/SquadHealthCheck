@@ -1,0 +1,13 @@
+﻿@model SquadHealthCheck.Item
+
+    <div style="width:240px;height:360px;background-image:url('/Content/HealthCheckCard.png');background-position:top;background-repeat:no-repeat;position:relative">
+        <div style="position:absolute;top:60px;width:250px;text-align:center;font-weight:bold">
+            @Model.Name
+        </div>
+        <div style="position:absolute;width:165px;right:15px;top:125px">
+            @Model.BestText
+        </div>
+        <div style="position:absolute;width:165px;right:15px;top:235px">
+            @Model.WorstText
+        </div>
+    </div>

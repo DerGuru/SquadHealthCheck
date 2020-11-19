@@ -1,0 +1,24 @@
+﻿@model SquadHealthCheck.TrafficLightModel
+<div style="background-image:url('/Content/TrafficLight.png');background-repeat:no-repeat;background-position:center;background-color:none;height:240px;width:130px">
+    <div style="background-image:url('/Content/@(Model.Item.Value.ToString()).png');background-repeat:no-repeat;background-position:center;height:100%;width:100%;display:flex;flex-direction:column;" id="TrafficLight@(Model.SquadId)_@(Model.Item.Id)">
+        <div style="padding:0px;margin:0px;width:100%;height:33%">
+            <abbr blubber="@Model.Item.WorstText">
+                <a style="padding:0px;" onclick="$.connection.viewerHub.server.setUserValue(@Model.SquadId, @Model.Item.Id, @((int)SquadHealthCheck.ItemValue.Bad))">
+                    <img src="~/Content/None.png" style="width:100%;height:100%" />
+                </a>
+            </abbr>
+        </div>
+        <div style="padding:0px;margin:0px;width:100%;height:28%">
+            <a onclick="$.connection.viewerHub.server.setUserValue(@Model.SquadId,@Model.Item.Id,@((int)SquadHealthCheck.ItemValue.Medium))">
+                <img src="~/Content/None.png" style="width:100%;height:100%" />
+            </a>
+        </div>
+        <div style="padding:0px;width:100%;height:39%">
+            <abbr blubber="@Model.Item.BestText">
+                <a onclick="$.connection.viewerHub.server.setUserValue(@Model.SquadId,@Model.Item.Id,@((int)SquadHealthCheck.ItemValue.Good))">
+                    <img src="~/Content/None.png" style="width:100%;height:100%"/>
+                </a>
+            </abbr>
+        </div>
+    </div>
+</div>

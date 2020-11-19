@@ -1,0 +1,24 @@
+﻿@model SquadHealthCheck.Models.AdminModel
+@{
+    ViewBag.Title = "Manage Squad Page";
+}
+<script type="text/javascript">
+    function onButtonClick() {
+        location.href = encodeURI('/ManageSquad/Create/' + btoa(squadname.value));
+    }
+</script>
+<div>
+    Squad Name: <input id="squadname" type="text" width="250" /><button class="actionButton" onclick="onButtonClick()">Create Squad</button>
+</div>
+<div>
+    <div style="display: flex;flex-direction: row;" class="AdminSquads">
+        @{
+            foreach (var Squad in Model.Squads)
+            {
+                <div style="width:auto;padding:5px;text-wrap:normal;max-width:150px">
+                    <partial name="AdminSquad" model=@Squad />
+                </div>
+            }
+        }
+    </div>
+</div>
