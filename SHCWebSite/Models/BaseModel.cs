@@ -9,14 +9,11 @@ namespace SquadHealthCheck.Models
 {
     public class BaseModel
     {
-        protected Guid GetUserHash(string userName)
-        {
-            SHA256 sha256 = SHA256.Create();
-            var bytes = sha256.ComputeHash(Encoding.ASCII.GetBytes(userName));
-            return new Guid(bytes);
-        }
+        private static SHA256 sha256 = SHA256.Create();
+        protected byte[] GetUserHash(string userName)
+            => sha256.ComputeHash(Encoding.ASCII.GetBytes(userName));
 
-        public Guid Userhash { get; private set; }
+        public byte[] Userhash { get; }
 
         protected BaseModel(string userName)
         {

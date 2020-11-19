@@ -6,16 +6,18 @@ using System.Text;
 
 namespace SquadHealthCheck.Controllers
 {
+    [Route("/ManageSquad")]
     public class ManageSquadController : Controller
     {
 
-        // GET: Squad
+        [Route("")]
         public IActionResult Index()
         {
             AdminModel vm = new AdminModel(new Uri(HttpContext.Request.GetDisplayUrl()), HttpContext.User.Identity?.Name);
             return View(vm);
         }
 
+        [Route("Create/{id}")]
         public IActionResult Create(string id)
         {
             string name = Encoding.Default.GetString(Convert.FromBase64String(id));
@@ -26,7 +28,7 @@ namespace SquadHealthCheck.Controllers
                 return View("SquadExists");
         }
 
-
+        [Route("Config/{id}")]
         public IActionResult Config(int id)
         {
             AdminModel vm = new AdminModel(new Uri(HttpContext.Request.GetDisplayUrl()), HttpContext.User.Identity?.Name, id);

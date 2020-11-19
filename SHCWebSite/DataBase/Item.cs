@@ -2,10 +2,11 @@ namespace SquadHealthCheck
 {
     using System;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     public partial class Item : IEquatable<Item>
     {
-        public int Id { get; set; }
+        [Key] [DatabaseGenerated(DatabaseGeneratedOption.Identity)] public int Id { get; set; }
 
         [Required]
         [StringLength(50)]

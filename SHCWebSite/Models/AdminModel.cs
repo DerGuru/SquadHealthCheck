@@ -7,7 +7,7 @@ namespace SquadHealthCheck.Models
     public class AdminModel : BaseModel
     {
         public string JoinLink => $"{baseUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.UriEscaped)}/Join/{Squad.Id}";
-        public Guid Adminhash { get; private set; }
+        public byte[] Adminhash { get; }
         public List<Squad> Squads 
         {
             get 

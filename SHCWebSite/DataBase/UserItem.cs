@@ -1,12 +1,13 @@
 namespace SquadHealthCheck
 {
-    using System;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     public partial class UserItem
     {
-        public long Id { get; set; }
+        [Key] [DatabaseGenerated(DatabaseGeneratedOption.Identity)] public long Id { get; set; }
 
-        public Guid Userhash { get; set; }
+        public byte[] Userhash { get; set; }
 
         public int Squad { get; set; }
 
