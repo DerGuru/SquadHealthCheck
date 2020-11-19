@@ -13,10 +13,13 @@ namespace SquadHealthCheck.Models
         protected byte[] GetUserHash(string userName)
             => sha256.ComputeHash(Encoding.ASCII.GetBytes(userName));
 
+        protected readonly Func<ShcDataModel> DataBase;
+
         public byte[] Userhash { get; }
 
-        protected BaseModel(string userName)
+        protected BaseModel(string userName, Func<ShcDataModel> db)
         {
+            DataBase = db;
             Userhash = GetUserHash(userName);
         }
     }

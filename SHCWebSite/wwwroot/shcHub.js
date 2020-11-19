@@ -17,11 +17,33 @@ shcHub.on("updateId", (id, url) => {
 shcHub.on("updateValue", (id, value) => {
     document.getElementById(id).innerText = value;
 });
-
-
 shcHub.on("refresh", () => {
     document.location.reload();
 });
+shcHub.on("addedItem", (id) => {
+    var card = document.getElementById("Card" + id);
+    card.parentElement.removeChild(card);
+    var parentId = "removeItem";
+    var newParent = document.getElementById(parentId);
+    newParent.appendChild(card);
+});
+
+shcHub.on("removedItem", (id) => {
+    var card = document.getElementById("Card" + id);
+    card.parentElement.removeChild(card);
+    var parentId = "addItem";
+    var newParent = document.getElementById(parentId);
+    newParent.appendChild(card);
+});
 
 shcHub.onclose(start);
-await start();
+start();
+
+function cardClicked(squad, item) {
+    var card = document.getElementById("Card" + item);
+    shcHub.invoke(card.parentElement.id, squad, item);
+}
+
+function setUserValue(squad, item, value) {
+    shcHub.invoke("setUserValue", squad, item, value);
+}

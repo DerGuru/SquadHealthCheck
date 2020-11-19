@@ -16,29 +16,23 @@
     @Model.Squad.Name
 </div>
 <div>
-    <div style="display: flex;flex-direction: row;width:100%;flex-wrap:wrap" class="SquadItems">
+    <div id="removeItem" style="display: flex;flex-direction: row;width:100%;flex-wrap:wrap" class="SquadItems">
         @{
             foreach (var item in Model.SquadItems)
             {
-                <div style="width:auto;margin:5px;text-wrap:normal;position:relative">
+                <div id="Card@(item.Id)" style="width:auto;margin:5px;text-wrap:normal;position:relative" onclick="cardClicked(@Model.Squad.Id,@item.Id)">
                     <partial name="Item" model=@item />
-                    <div>
-                        <a href="~/ManageSquad/RemoveItem/@Model.Squad.Id/@item.Id">Remove Item</a>
-                    </div>
                 </div>
             }
         }
     </div>
     <hr />
-    <div style="display: flex;flex-direction: row;width:100%;flex-wrap:wrap" class="SquadItems">
+    <div id="addItem" style="display: flex;flex-direction: row;width:100%;flex-wrap:wrap" class="SquadItems">
         @{
             foreach (var item in Model.AvailableItems)
             {
-                <div style="width:auto;margin:5px;text-wrap:normal;position:relative">
+                <div id="Card@(item.Id)" style="width:auto;margin:5px;text-wrap:normal;position:relative" onclick="cardClicked(@Model.Squad.Id,@item.Id)">
                     <partial name="Item" model=@item />
-                    <div>
-                        <a href="~/ManageSquad/AddItem/@Model.Squad.Id/@item.Id">Add Item</a>
-                    </div>
                 </div>
             }
         }

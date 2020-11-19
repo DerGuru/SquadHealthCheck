@@ -12,7 +12,7 @@ namespace SquadHealthCheck.Models
     public class ViewerModel : BaseModel
     {
 
-        public ViewerModel(string userName) : base(userName)
+        public ViewerModel(Func<ShcDataModel> db, string userName) : base(userName, db)
         {
            
         }
@@ -20,21 +20,21 @@ namespace SquadHealthCheck.Models
         public ItemData SetUserValue(int itemid, ItemValue value, int squadid)
         {
             ItemData itemData = null;
-            using (var model = new ShcDataModel())
+            var model = DataBase();
             {
-                var item = model.UserItems.SingleOrDefault(x => x.Userhash == Userhash && x.Item == itemid && x.Squad == squadid);
+                var item = model.UserItem.SingleOrDefault(x => x.Userhash == Userhash && x.Item == itemid && x.Squad == squadid);
                 if (item == null)
                 {
                     item = new UserItem { Userhash = Userhash, Item = itemid, Squad = squadid, Value = value };
-                    model.UserItems.Add(item);
+                    model.UserItem.Add(item);
                 }
                 else
                 {
                     item.Value = value;
                 }
                 model.SaveChanges();
-                var titem = model.Items.FirstOrDefault(x => x.Id == itemid);
-                itemData = new ItemData(titem, value, model.UserItems.Where(x => x.Squad == squadid && x.Item == itemid && x.Value > ItemValue.None));
+                var titem = model.Item.FirstOrDefault(x => x.Id == itemid);
+                itemData = new ItemData(titem, value, model.UserItem.Where(x => x.Squad == squadid && x.Item == itemid && x.Value > ItemValue.None));
 
                 return itemData;
             }
@@ -42,10 +42,10 @@ namespace SquadHealthCheck.Models
 
         public void Leave(int id)
         {
-            using (var model = new ShcDataModel())
+            var model = DataBase();
             {
-                model.UserItems.RemoveRange(model.UserItems.Where(x => x.Squad == id));
-                model.SquadMembers.RemoveRange(model.SquadMembers.Where(x => x.Squad == id && x.Userhash == Userhash));
+                model.UserItem.RemoveRange(model.UserItem.Where(x => x.Squad == id));
+                model.SquadMember.RemoveRange(model.SquadMember.Where(x => x.Squad == id && x.Userhash == Userhash));
                 model.SaveChanges();
             }
         }
@@ -75,11 +75,11 @@ namespace SquadHealthCheck.Models
 
         public List<UserData> GetUserData()
         {
-            using (var model = new ShcDataModel())
+            var model = DataBase();
             {
-                var squad = model.Squads; ;
-                var items = model.Items;
-                return model.UserItems.Where(x => x.Userhash == Userhash)
+                var squad = model.Squad; ;
+                var items = model.Item;
+                return model.UserItem.Where(x => x.Userhash == Userhash)
                     .Join(squad, x => x.Squad, y => y.Id, (UserItem, Squad) => new { UserItem, Squad })
                     .Join(items, x => x.UserItem.Item, y => y.Id, (UserItemSquad, Item) => new UserData(UserItemSquad.UserItem, UserItemSquad.Squad, Item))
                     .ToList();
@@ -88,33 +88,33 @@ namespace SquadHealthCheck.Models
 
         public List<UserItem> GetSquadData(int squadId)
         {
-            using (var model = new ShcDataModel())
+            var model = DataBase();
             {
-                return model.UserItems.Where(t => t.Squad == squadId && t.Value > ItemValue.None).ToList();
+                return model.UserItem.Where(t => t.Squad == squadId && t.Value > ItemValue.None).ToList();
             }
         }
 
 
         public void Join(int id)
         {
-            using (var model = new ShcDataModel())
+            var model = DataBase();
             {
-                var memberShip = model.SquadMembers.SingleOrDefault(v => v.Squad == id && v.Userhash == Userhash);
+                var memberShip = model.SquadMember.SingleOrDefault(v => v.Squad == id && v.Userhash == Userhash);
 
                 if (memberShip == null)
                 {
                     memberShip = new SquadMember() { Squad = id, Userhash = Userhash };
-                    model.SquadMembers.Add(memberShip);
+                    model.SquadMember.Add(memberShip);
 
                     model.SaveChanges();
                 }
 
-                var squadItems = model.SquadItems.Where(sqi => sqi.Squad == id).Select(x => x.Item);
-                var useritems = model.UserItems.Where(ui => ui.Userhash == Userhash && ui.Squad == id).Select(x => x.Item);
+                var squadItems = model.SquadItem.Where(sqi => sqi.Squad == id).Select(x => x.Item);
+                var useritems = model.UserItem.Where(ui => ui.Userhash == Userhash && ui.Squad == id).Select(x => x.Item);
                 var join = squadItems.Except(useritems);
                 foreach (var item in join)
                 {
-                    model.UserItems.Add(new UserItem { Userhash = Userhash, Item = item, Squad = id, Value = ItemValue.None });
+                    model.UserItem.Add(new UserItem { Userhash = Userhash, Item = item, Squad = id, Value = ItemValue.None });
                 }
 
                 model.SaveChanges();

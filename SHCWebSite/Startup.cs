@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
 
 namespace SquadHealthCheck
 {
@@ -18,8 +21,22 @@ namespace SquadHealthCheck
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.CheckConsentNeeded = context => false;
+                options.MinimumSameSitePolicy = SameSiteMode.Unspecified;
+                options.HandleSameSiteCookieCompatibility();
+            });
+
+            services.AddDbContext<ShcDataModel>();
+
+            services.AddMicrosoftIdentityWebAppAuthentication(Configuration);
             services.AddSignalR();
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddMicrosoftIdentityUI()
+#if DEBUG
+            .AddRazorRuntimeCompilation()
+#endif
+            ;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,9 +52,14 @@ namespace SquadHealthCheck
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
 
+            app.UseCookiePolicy();
             app.UseRouting();
+
+            app.UseFileServer();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(e =>
             {

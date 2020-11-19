@@ -1,7 +1,7 @@
 ﻿@model SquadHealthCheck.TrafficLightModel
-<div style="background-image:url('/Content/TrafficLight.png');background-repeat: no-repeat;background-position: center; background-color:none;height:240px;width:130px;">
-    <div id="Ceiling@(Model.SquadId)_@Model.Item.Id" style="background-image:url('/Content/@(((SquadHealthCheck.ItemValue)((int)Math.Ceiling(Model.Item.SquadValue))).ToString()).png');background-repeat:no-repeat;background-position:center;height:100%;width:100%;">
-        <div id="Floor@(Model.SquadId)_@Model.Item.Id" style="background-image:url('/Content/@(((SquadHealthCheck.ItemValue)((int)Math.Floor(Model.Item.SquadValue))).ToString()).png');background-repeat: no-repeat;background-position: center;height:100%;width:100%;text-align:center">
+<div style="background-image:url('/TrafficLight.png');background-repeat: no-repeat;background-position: center; background-color:none;height:240px;width:130px;">
+    <div id="Ceiling@(Model.SquadId)_@Model.Item.Id" style="background-image:url('/@(((SquadHealthCheck.ItemValue)((int)Math.Ceiling(Model.Item.SquadValue))).ToString()).png');background-repeat:no-repeat;background-position:center;height:100%;width:100%;">
+        <div id="Floor@(Model.SquadId)_@Model.Item.Id" style="background-image:url('/@(((SquadHealthCheck.ItemValue)((int)Math.Floor(Model.Item.SquadValue))).ToString()).png');background-repeat: no-repeat;background-position: center;height:100%;width:100%;text-align:center">
             <div style="display:flex; flex-direction:column;justify-content:space-between;font-size:xx-large;font-weight:bold;opacity:0.4;height:100%;color:royalblue">
                 <div style="height:33%;display:flex;flex-direction:column;justify-content:center">
                     <div id="Bad@(Model.SquadId)_@(Model.Item.Id)">

@@ -6,7 +6,7 @@ namespace SquadHealthCheck
 
     public partial class SquadAdmin
     {
-        [Key] [DatabaseGenerated(DatabaseGeneratedOption.Identity)] public long Id { get; set; }
+        [Key] [DatabaseGenerated(DatabaseGeneratedOption.Identity)] public int Id { get; set; }
 
         public int Squad { get; set; }
 

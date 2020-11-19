@@ -8,14 +8,14 @@ namespace SquadHealthCheck.Models
     {
         public string JoinLink => $"{baseUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.UriEscaped)}/Join/{Squad.Id}";
         public byte[] Adminhash { get; }
-        public List<Squad> Squads 
+        public List<Squad> Squads
         {
-            get 
+            get
             {
-                using (var model = new ShcDataModel())
+                var model = DataBase();
                 {
-                    var admins = model.SquadAdmins.Where(x => x.Adminhash == Adminhash);
-                    return admins.Join(model.Squads, a => a.Squad, b => b.Id, (i, k) => k).Where(u => u != null).ToList();
+                    var admins = model.SquadAdmin.Where(x => x.Adminhash == Adminhash);
+                    return admins.Join(model.Squad, a => a.Squad, b => b.Id, (i, k) => k).Where(u => u != null).ToList();
                 }
             }
         }
@@ -30,10 +30,10 @@ namespace SquadHealthCheck.Models
             {
                 if (_items == null)
                 {
-                    using (var model = new ShcDataModel())
+                    var model = DataBase();
                     {
-                        var squadItems = model.SquadItems.Where(x => x.Squad == Squad.Id);
-                        _items = squadItems.Join(model.Items, x => x.Item, y => y.Id, (i, k) => k).Where(u => u != null).ToList();
+                        var squadItems = model.SquadItem.Where(x => x.Squad == Squad.Id);
+                        _items = squadItems.Join(model.Item, x => x.Item, y => y.Id, (i, k) => k).Where(u => u != null).ToList();
                     }
                 }
                 return _items;
@@ -42,47 +42,47 @@ namespace SquadHealthCheck.Models
 
         public void DeleteSquad()
         {
-            using (var model = new ShcDataModel())
+            var model = DataBase();
             {
-                model.UserItems.RemoveRange(model.UserItems.Where(x => x.Squad == Squad.Id));
-                model.SquadAdmins.RemoveRange(model.SquadAdmins.Where(x => x.Squad == Squad.Id));
-                model.Squads.RemoveRange(model.Squads.Where(x => x.Id == Squad.Id));
-                model.SquadMembers.RemoveRange(model.SquadMembers.Where(x => x.Id == Squad.Id));
-                model.SquadItems.RemoveRange(model.SquadItems.Where(x => x.Id == Squad.Id));
+                model.UserItem.RemoveRange(model.UserItem.Where(x => x.Squad == Squad.Id));
+                model.SquadAdmin.RemoveRange(model.SquadAdmin.Where(x => x.Squad == Squad.Id));
+                model.Squad.RemoveRange(model.Squad.Where(x => x.Id == Squad.Id));
+                model.SquadMember.RemoveRange(model.SquadMember.Where(x => x.Id == Squad.Id));
+                model.SquadItem.RemoveRange(model.SquadItem.Where(x => x.Id == Squad.Id));
                 model.SaveChanges();
             }
         }
 
-        public List<Item> AvailableItems 
+        public List<Item> AvailableItems
         {
-            get 
+            get
             {
-                using (var model = new ShcDataModel())
+                var model = DataBase();
                 {
-                    return model.Items.Where(x => !SquadItems.Select(sq => sq.Id).Contains(x.Id)).ToList();
+                    return model.Item.Where(x => !SquadItems.Select(sq => sq.Id).Contains(x.Id)).ToList();
                 }
-            } 
+            }
         }
 
-        public void AddItem (int itemId)
+        public void AddItem(int itemId)
         {
 
-            using (var model = new ShcDataModel())
+            var model = DataBase();
             {
-                model.SquadItems.Add(new SquadItem { Item = itemId, Squad = Squad.Id });
+                model.SquadItem.Add(new SquadItem { Item = itemId, Squad = Squad.Id });
                 model.SaveChanges();
-                   
-                var userItems = model.UserItems;
-                var item = model.SquadItems.Single(x => x.Item == itemId && x.Squad == Squad.Id);
+
+                var userItems = model.UserItem;
+                var item = model.SquadItem.Single(x => x.Item == itemId && x.Squad == Squad.Id);
                 var items = userItems.Where(x => x.Squad == Squad.Id)
                         .Select(u => u.Userhash)
                         .Distinct().ToList();
-                
+
                 if (!items.Contains(Userhash))
                 {
                     items.Add(Userhash);
                 }
-                
+
                 foreach (var i in items)
                 {
                     var userItem = new UserItem { Item = itemId, Squad = Squad.Id, Userhash = i, Value = ItemValue.None };
@@ -94,13 +94,13 @@ namespace SquadHealthCheck.Models
         }
         public void RemoveItem(int itemId)
         {
-            using (var model = new ShcDataModel())
+            var model = DataBase();
             {
-                var t = model.SquadItems;
+                var t = model.SquadItem;
                 var item = t.Where(x => x.Squad == Squad.Id && x.Item == itemId);
                 if (!item.Any()) return;
 
-                var userItems = model.UserItems;
+                var userItems = model.UserItem;
                 userItems.RemoveRange(userItems.Where(x => x.Squad == Squad.Id && x.Item == itemId));
 
                 t.RemoveRange(item);
@@ -110,19 +110,19 @@ namespace SquadHealthCheck.Models
 
         private void CheckAdmin()
         {
-            using (var model = new ShcDataModel())
+            var model = DataBase();
             {
-            if (!model.SquadAdmins.Where(x => x.Squad == Squad.Id && x.Adminhash == Adminhash).Any())
-                throw new UnauthorizedAccessException("You are not the administrator for this squad!");
+                if (!model.SquadAdmin.Where(x => x.Squad == Squad.Id && x.Adminhash == Adminhash).Any())
+                    throw new UnauthorizedAccessException("You are not the administrator for this squad!");
             }
         }
 
         public bool Create(string name)
         {
             bool created = false;
-            using (var model = new ShcDataModel())
+            var model = DataBase();
             {
-                var squads = model.Squads;
+                var squads = model.Squad;
                 var squad = squads.SingleOrDefault(x => x.Name == name);
                 if (squad == null)
                 {
@@ -134,7 +134,7 @@ namespace SquadHealthCheck.Models
 
                     squad = squads.SingleOrDefault(x => x.Name == name);
                     Squad = squad;
-                    var admins = model.SquadAdmins;
+                    var admins = model.SquadAdmin;
                     admins.Add(new SquadAdmin { Squad = squad.Id, Adminhash = Adminhash, Id = 0 });
                     model.SaveChanges();
                 }
@@ -142,18 +142,18 @@ namespace SquadHealthCheck.Models
             return created;
         }
 
-        public AdminModel(Uri baseUri, string name): base (name)
+        public AdminModel(Uri baseUri, Func<ShcDataModel> db, string name) : base(name, db)
         {
             this.baseUri = baseUri;
+
             Adminhash = GetUserHash(Admin(name));
         }
 
-        public AdminModel(Uri baseUri, string name, int squadid) : this(baseUri, name)
+        public AdminModel(Uri baseUri, Func<ShcDataModel> db, string name, int squadid) : this(baseUri, db, name)
         {
-            using (var model = new ShcDataModel())
-            {
-                Squad = model.Squads.Where(x => x.Id == squadid).FirstOrDefault();
-            }
+
+            var model = DataBase();
+            Squad = model.Squad.Where(x => x.Id == squadid).FirstOrDefault();
             CheckAdmin();
         }
 

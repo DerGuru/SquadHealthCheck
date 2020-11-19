@@ -4,16 +4,18 @@ namespace SquadHealthCheck
 
     public partial class ShcDataModel : DbContext
     {
+     
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
                 optionsBuilder.UseSqlServer(System.Environment.GetEnvironmentVariable("SQL"), (_) => _.EnableRetryOnFailure());
         }
-        public virtual DbSet<Item> Items { get; set; }
-        public virtual DbSet<Squad> Squads { get; set; }
-        public virtual DbSet<SquadAdmin> SquadAdmins { get; set; }
-        public virtual DbSet<SquadItem> SquadItems { get; set; }
-        public virtual DbSet<SquadMember> SquadMembers { get; set; }
-        public virtual DbSet<UserItem> UserItems { get; set; }
+        public virtual DbSet<Item> Item { get; set; }
+        public virtual DbSet<Squad> Squad { get; set; }
+        public virtual DbSet<SquadAdmin> SquadAdmin { get; set; }
+        public virtual DbSet<SquadItem> SquadItem { get; set; }
+        public virtual DbSet<SquadMember> SquadMember { get; set; }
+        public virtual DbSet<UserItem> UserItem { get; set; }
     }
 }
