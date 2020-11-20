@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 namespace SquadHealthCheck.Models
 {
     public class BinaryComparer : IEqualityComparer<byte[]>
     {
-        public BinaryComparer()
-        {
-        }
-
         public bool Equals(byte[] x, byte[] y)
         {
             if (x.Length != y.Length) return false;
