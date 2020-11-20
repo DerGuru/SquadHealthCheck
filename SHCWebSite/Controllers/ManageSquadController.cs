@@ -42,8 +42,5 @@ namespace SquadHealthCheck.Controllers
             AdminModel vm = new AdminModel(new Uri(HttpContext.Request.GetDisplayUrl()), () => sp.GetRequiredService<ShcDataModel>(), HttpContext.User.Identity?.Name, id);
             return View(vm);
         }
-
-
-
     }
 }

@@ -22,7 +22,7 @@ shcHub.on("refresh", () => {
 });
 shcHub.on("addedItem", (id) => {
     var card = document.getElementById("Card" + id);
-    card.parentElement.removeChild(card);
+    card.remove();
     var parentId = "removeItem";
     var newParent = document.getElementById(parentId);
     newParent.appendChild(card);
@@ -30,10 +30,15 @@ shcHub.on("addedItem", (id) => {
 
 shcHub.on("removedItem", (id) => {
     var card = document.getElementById("Card" + id);
-    card.parentElement.removeChild(card);
+    card.remove();
     var parentId = "addItem";
     var newParent = document.getElementById(parentId);
     newParent.appendChild(card);
+});
+
+shcHub.on("removeElement", (id) => {
+    var node = document.getElementById(id);
+    node.remove();
 });
 
 shcHub.onclose(start);
@@ -47,3 +52,8 @@ function cardClicked(squad, item) {
 function setUserValue(squad, item, value) {
     shcHub.invoke("setUserValue", squad, item, value);
 }
+
+function deleteSquad(squadId) {
+    shcHub.invoke("deleteSquad", squadId);
+}
+

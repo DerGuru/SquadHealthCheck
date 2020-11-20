@@ -6,6 +6,7 @@ namespace SquadHealthCheck.Models
 {
     public class AdminModel : BaseModel
     {
+        public static BinaryComparer BinaryComparer { get; } = new BinaryComparer();
         public string JoinLink => $"{baseUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.UriEscaped)}/Join/{Squad.Id}";
         public byte[] Adminhash { get; }
         public List<Squad> Squads
@@ -78,7 +79,7 @@ namespace SquadHealthCheck.Models
                         .Select(u => u.Userhash)
                         .Distinct().ToList();
 
-                if (!items.Contains(Userhash))
+                if (!items.Contains(Userhash, BinaryComparer))
                 {
                     items.Add(Userhash);
                 }

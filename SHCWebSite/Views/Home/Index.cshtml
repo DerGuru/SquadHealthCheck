@@ -18,7 +18,7 @@
     @{
         foreach (var squad in Model.UserData)
         {
-            <div class="Squad" style="margin:10px">
+            <div id="Squad@(squad.SquadId)" class="Squad" style="margin:10px">
                 <div style="font-size:larger;font-weight:bold">
                     @squad.Name (<a href="~/Leave/@squad.SquadId">Leave</a>)
                 </div>

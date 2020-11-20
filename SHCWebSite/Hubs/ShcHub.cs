@@ -55,13 +55,13 @@ namespace SquadHealthCheck.Hubs
             );
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteSquad(int id)
         {
             var HttpContext = Context.GetHttpContext();
             AdminModel vm = new AdminModel(new Uri(HttpContext.Request.GetDisplayUrl()), () => sp.GetRequiredService<ShcDataModel>(), HttpContext.User.Identity?.Name, id);
             vm.DeleteSquad();
-            await Clients.Group(id.ToString()).SendCoreAsync("refresh",new object[] { });
-            await Clients.Caller.SendCoreAsync("refresh", new object[] { });
+            await Clients.Caller.SendCoreAsync("removeElement", new object[] { $"Squad{id}" });
+            await Clients.Group(id.ToString()).SendCoreAsync("removeElement",new object[] {$"Squad{id}"});
         }
 
         public async Task AddItem(int squadId, int itemid)
